@@ -7,6 +7,7 @@ This Application has been developed with:
 Software description
 --------------------
 This application is clone of MS notepad with the same features and functionalities.
+
 How it works
 -
 In [container.h](https://github.com/OmarAymanMahfouz/Notepad/blob/master/container.h)
