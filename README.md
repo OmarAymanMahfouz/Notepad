@@ -11,8 +11,9 @@ This application is clone of MS notepad with the same features and functionaliti
 How it works
 -
 In [container.h](https://github.com/OmarAymanMahfouz/Notepad/blob/master/container.h)
-* The genaricClass handles all the external behaviours like open, save and saveAs.
-* The genaricClass also handles the construction and desturction of the opened Notepad files.
+* The windowController class handles the construction and destruction of the windows.
+* The saveClass class handles saving mechanism.
+* The openClass class handles opening mechanism.
 
 In [mainwindow.h](https://github.com/OmarAymanMahfouz/Notepad/blob/master/mainwindow.h)
 * The MainWindow handles all events that happens in the current activated window.
