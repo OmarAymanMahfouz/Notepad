@@ -19,7 +19,6 @@ public:
     static std::pair<bool, std::pair<QString, QString>> openFile(QWidget *e);
     static void generateNewWindow();
     static void deleteWindow(int frameNumber);
-    static bool textchanged(QString &curText, QString &Path);
     static std::vector<MainWindow*> windowsGenerated;
     static QString getFileName(QString &s);
     ~genaricClass();

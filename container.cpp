@@ -80,19 +80,3 @@ void genaricClass::deleteWindow(int frameNumber){
     if(idx != -1)
         genaricClass::windowsGenerated.erase(genaricClass::windowsGenerated.begin() + idx);
 }
-
-bool genaricClass::textchanged(QString &curText, QString &path){
-    if(path.isEmpty() && curText.isEmpty())
-        return false;
-    else if(!path.isEmpty()){
-        QFile file(path);
-        QTextStream in(&file);
-        if(file.open(QFile::ReadOnly | QFile::Text)){
-            QString text = in.readAll();
-            file.close();
-            if(curText == text)
-                return false;
-        }
-    }
-    return true;
-}
