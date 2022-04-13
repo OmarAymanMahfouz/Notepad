@@ -3,6 +3,7 @@ Notepad Application
 This Application has been developed with:
 * Qt/c++
 * Cmake
+
 Software description
 --------------------
 This application is clone of MS notepad with the same features and functionalities.
