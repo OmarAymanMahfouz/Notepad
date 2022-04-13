@@ -47,7 +47,6 @@ MainWindow::MainWindow(QWidget *parent, int frameNumber)
     QObject::connect(this->newWindow, SIGNAL(activated()), this, SLOT(on_actionNewWindow_triggered()));
     this->find = new QShortcut(QKeySequence("Ctrl+F"), this);
     QObject::connect(this->find, SIGNAL(activated()), this, SLOT(on_actionFind_triggered()));
-    QObject::connect(ui->plainTextEdit, SIGNAL(clicked()), this, SLOT(on_plainTextEdit_cursorPositionChanged()));
 }
 
 
@@ -72,7 +71,7 @@ MainWindow::~MainWindow()
                  this->newWindow = this->selectAll = this->undo =
                  this->redo = nullptr;
 
-    genaricClass::deleteWindow(this->frameNumber);
+    windowController::deleteWindow(this->frameNumber);
 }
 
 //done
@@ -82,6 +81,7 @@ void MainWindow::closeEvent(QCloseEvent *event){
     else
         event->ignore();
 }
+
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
@@ -137,6 +137,23 @@ void MainWindow::manageWheelEvent(QWheelEvent *event){
 }
 
 //done
+QString MainWindow::getFileName(QString &path)
+{
+    QString fileName = "";
+    bool flag = false;
+    for(int i = path.size() - 1; i >= 0; i--)
+        if(path[i] == '/')
+            break;
+        else if (path[i] == '.' && !flag)
+            flag = true;
+        else if (flag)
+            fileName.append(path[i]);
+
+    std::reverse(fileName.begin(), fileName.end());
+    return fileName;
+}
+
+//done
 bool MainWindow::windowShouldCLose(){
     QString text = ui->plainTextEdit->toPlainText();
     if(this->initialText == ui->plainTextEdit->toPlainText())
@@ -187,13 +204,13 @@ bool MainWindow::windowShouldCLose(){
 bool MainWindow::saveRole(){
     QString text = ui->plainTextEdit->toPlainText();
     if (this->currentPath == ""){
-        std::pair<bool, QString> closeCurWindow = genaricClass::saveFile(text, this);
+        std::pair<bool, QString> closeCurWindow = saveClass::saveFile(text, this);
         if(closeCurWindow.first){
             return true;
         }
     }
     else{
-        bool flag = genaricClass::saveFile(text, this->currentPath, this);
+        bool flag = saveClass::saveFile(text, this->currentPath, this);
         if(flag)
             return true;
     }
@@ -221,11 +238,12 @@ void MainWindow::on_actionExit_triggered()
 void MainWindow::on_actionSave_As_triggered()
 {
     QString text = ui->plainTextEdit->toPlainText();
-    std::pair<bool, QString> isSaved = genaricClass::saveFile(text, this);
+    std::pair<bool, QString> isSaved = saveClass::saveFile(text, this);
     if (isSaved.first){
         this->currentPath = isSaved.second;
-        this->fileName = genaricClass::getFileName(this->currentPath);
+        this->fileName = this->getFileName(this->currentPath);
         this->setWindowTitle(this->fileName + " - Notepad");
+        this->initialText = text;
     }
 }
 
@@ -234,15 +252,20 @@ void MainWindow::on_actionSave_triggered()
 {
     QString text = ui->plainTextEdit->toPlainText();
     if(this->currentPath.isEmpty()){
-        std::pair<bool, QString> flag = genaricClass::saveFile(text, this);
+        std::pair<bool, QString> flag = saveClass::saveFile(text, this);
         if(flag.first){
             this->currentPath = flag.second;
-            this->fileName = genaricClass::getFileName(this->currentPath);
+            this->fileName = this->getFileName(this->currentPath);
+            this->initialText = text;
             this->setWindowTitle(this->fileName + " - Notepad");
         }
     }
-    else
-        genaricClass::saveFile(text, this->currentPath, this);
+    else{
+        bool flag = saveClass::saveFile(text, this->currentPath, this);
+        if (flag)
+            this->initialText = text;
+        this->setWindowTitle(this->fileName + " - Notepad");
+    }
 }
 
 //done
@@ -250,7 +273,7 @@ void MainWindow::on_actionNew_triggered()
 {
     bool flag = this->windowShouldCLose();
     if (flag){
-        genaricClass::generateNewWindow();
+        windowController::generateNewWindow();
         this->close();
     }
 }
@@ -260,11 +283,11 @@ void MainWindow::on_actionOpen_triggered()
 {
     bool flag = this->windowShouldCLose();
     if(flag){
-        std::pair<bool, std::pair<QString, QString>> state = genaricClass::openFile(this);
+        std::pair<bool, std::pair<QString, QString>> state = openClass::openFile(this);
         if(!state.first)
             return;
         this->currentPath = state.second.first;
-        this->fileName = genaricClass::getFileName(this->currentPath);
+        this->fileName = this->getFileName(this->currentPath);
         this->initialText = state.second.second;
         ui->plainTextEdit->setPlainText(state.second.second);
         this->setWindowTitle(this->fileName + " - Notepad");
@@ -449,5 +472,5 @@ void MainWindow::on_actionWord_Wrap_triggered()
 //done
 void MainWindow::on_actionNewWindow_triggered()
 {
-    genaricClass::generateNewWindow();
+    windowController::generateNewWindow();
 }

@@ -86,6 +86,7 @@ private:
 
     bool windowShouldCLose();
     void manageWheelEvent(QWheelEvent *event);
+    QString getFileName(QString &path);
     bool saveRole();
     QString currentPath;
     QString fileName;
