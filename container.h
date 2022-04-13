@@ -16,6 +16,7 @@ class windowController{
 public:
     static void generateNewWindow();
     static void deleteWindow(int frameNumber);
+private:
     static std::vector<MainWindow*> windowsGenerated;
 };
 
