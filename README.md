@@ -1,7 +1,7 @@
 Notepad Application
 ===================
 This Application has been developed with:
-* Qt/c++
+* C++/QT
 * Cmake
 
 Software description
