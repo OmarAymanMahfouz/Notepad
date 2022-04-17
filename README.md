@@ -6,7 +6,7 @@ This Application has been developed with:
 
 Software description
 --------------------
-This application is a clone of MS notepad with almost same features and functionalities.
+This application is a simple Notepad application that allows you to create or modify a text document
 
 How it works
 -
